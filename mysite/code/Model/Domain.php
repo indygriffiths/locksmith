@@ -3,7 +3,9 @@
 class Domain extends DataObject {
     private static $db = [
         'Domain'         => 'Varchar(255)',
-        'Enabled'        => 'Boolean(1)',
+		'Source'         => 'Enum("Manual,CloudFlare,Incapsula")',
+		'SourceID'       => 'Text',
+		'Enabled'        => 'Boolean(1)',
         'HasCertificate' => 'Boolean(0)',
         'LastChecked'    => 'SS_DateTime',
         'ErrorCode'      => 'Text',

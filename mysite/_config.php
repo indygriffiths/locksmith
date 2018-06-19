@@ -10,3 +10,7 @@ require_once('conf/ConfigureFromEnv.php');
 
 // Set the site locale
 i18n::set_locale('en_US');
+
+CMSMenu::remove_menu_item('CMSPagesController');
+CMSMenu::remove_menu_item('AssetAdmin');
+CMSMenu::remove_menu_item('CommentAdmin');
