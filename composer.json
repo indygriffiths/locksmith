@@ -1,0 +1,19 @@
+{
+	"name": "indygriffiths/locksmith",
+	"description": "Alerting for SSL",
+	"require": {
+		"php": ">=5.6",
+		"silverstripe/cms": "^3.6",
+		"silverstripe/framework": "^3.6",
+		"silverstripe/dynamodb": "^3.0",
+		"silverstripe/crontask": "^1.1"
+	},
+	"require-dev": {
+		"phpunit/PHPUnit": "~4.8"
+	},
+	"config": {
+		"process-timeout": 600
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
+}
