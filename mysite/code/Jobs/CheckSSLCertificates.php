@@ -18,7 +18,7 @@ class CheckSSLCertificates implements CronTask {
         // Get all enabled domains
         $domains = Domain::get()->filter(['Enabled' => 1]);
 
-        SS_Log::log('Number of existing domains: '.$domains->count(), SS_Log::INFO);
+        $this->log('Number of existing domains: '.$domains->count(), SS_Log::INFO);
 
         foreach ($domains as $d) {
             $d->LastChecked = time();
@@ -30,7 +30,7 @@ class CheckSSLCertificates implements CronTask {
                 $d->ErrorCode = $stream['code'];
                 $d->ErrorMessage = $stream['message'];
 
-                SS_Log::log('Couldn\'t fetch URL: '.$d->ErrorMessage, SS_Log::INFO);
+                $this->log('Couldn\'t fetch URL: '.$d->ErrorMessage, SS_Log::INFO);
 
                 $d->write();
                 continue;
@@ -48,7 +48,7 @@ class CheckSSLCertificates implements CronTask {
                     $d->ErrorMessage = $msg;
                 }
 
-                SS_Log::log('Couldn\'t decode cert: '.$d->ErrorMessage, SS_Log::WARN);
+                $this->log('Couldn\'t decode cert: '.$d->ErrorMessage, SS_Log::WARN);
                 $d->write();
                 continue;
             }
@@ -63,7 +63,7 @@ class CheckSSLCertificates implements CronTask {
                 // Still has the same cert, don't bother adding it again
                 $d->write();
 
-                SS_Log::log('Cert for '.$d->ID.' hasn\'t changed, not adding', SS_Log::DEBUG);
+                $this->log('Cert for '.$d->ID.' hasn\'t changed, not adding', SS_Log::DEBUG);
                 continue;
             }
 
@@ -82,7 +82,7 @@ class CheckSSLCertificates implements CronTask {
 
             $d->write();
 
-            SS_Log::log('Adding new certificate for '.$d->ID, SS_Log::INFO);
+            $this->log('Adding new certificate for '.$d->ID, SS_Log::INFO);
         }
     }
 
@@ -111,5 +111,14 @@ class CheckSSLCertificates implements CronTask {
         }
 
         return stream_context_get_params($read);
+    }
+
+    private function log($message, $level = SS_Log::INFO) {
+        SS_Log::log($message, $level);
+        if(Director::is_cli()) {
+            echo $message.PHP_EOL;
+        } else {
+            echo $message."<br>".PHP_EOL;
+        }
     }
 }
