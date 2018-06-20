@@ -104,7 +104,7 @@ class CheckSSLCertificates implements CronTask {
             ]
         ]);
 
-        $read = stream_socket_client("ssl://".$domain.":443", $errno, $errstr, $this->config()->socket_timeout, STREAM_CLIENT_CONNECT, $get);
+        $read = stream_socket_client("ssl://".$domain.":443", $errno, $errstr, 5, STREAM_CLIENT_CONNECT, $get);
 
         if(!$read) {
             return [
