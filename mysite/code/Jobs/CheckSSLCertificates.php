@@ -18,7 +18,7 @@ class CheckSSLCertificates implements CronTask {
         // Get all enabled domains
         $domains = Domain::get()->filter(['Enabled' => 1]);
 
-        $this->log('Number of existing domains: '.$domains->count(), SS_Log::INFO);
+        $this->log('Number of existing domains: '.$domains->count(), SS_Log::DEBUG);
 
         foreach ($domains as $d) {
             $d->LastChecked = time();
@@ -35,6 +35,8 @@ class CheckSSLCertificates implements CronTask {
                 $d->write();
                 continue;
             }
+
+            $this->log('Attempting to fetch certificate', SS_Log::DEBUG);
 
             // Attempt to parse the certificate
             $cert = openssl_x509_parse($stream['options']['ssl']['peer_certificate']);
@@ -59,6 +61,8 @@ class CheckSSLCertificates implements CronTask {
 
             // Get the latest cert we have on file for this domain
             $lastCert = $d->CurrentCertificate();
+
+            $this->log('Checking this cert against the current one', SS_Log::DEBUG);
             if ($lastCert->exists() && $lastCert->Fingerprint === $fingerprint) {
                 // Still has the same cert, don't bother adding it again
                 $d->write();
@@ -100,7 +104,7 @@ class CheckSSLCertificates implements CronTask {
             ]
         ]);
 
-        $read = @stream_socket_client("ssl://".$domain.":443", $errno, $errstr, $this->config()->socket_timeout, STREAM_CLIENT_CONNECT, $get);
+        $read = stream_socket_client("ssl://".$domain.":443", $errno, $errstr, $this->config()->socket_timeout, STREAM_CLIENT_CONNECT, $get);
 
         if(!$read) {
             return [
@@ -113,6 +117,10 @@ class CheckSSLCertificates implements CronTask {
         return stream_context_get_params($read);
     }
 
+    /**
+     * @param $message
+     * @param int $level
+     */
     private function log($message, $level = SS_Log::INFO) {
         SS_Log::log($message, $level);
         if(Director::is_cli()) {
