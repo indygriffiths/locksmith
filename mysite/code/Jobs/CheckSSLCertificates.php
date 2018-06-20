@@ -15,10 +15,10 @@ class CheckSSLCertificates implements CronTask {
      * @throws ValidationException
      */
     public function process() {
-        increase_time_limit_to(300);
-
         // Get all enabled domains
         $domains = Domain::get()->filter(['Enabled' => 1]);
+
+        SS_Log::log('Number of existing domains: '.$domains->count(), SS_Log::INFO);
 
         foreach ($domains as $d) {
             $d->LastChecked = time();
@@ -29,6 +29,8 @@ class CheckSSLCertificates implements CronTask {
             if (isset($stream['error'])) {
                 $d->ErrorCode = $stream['code'];
                 $d->ErrorMessage = $stream['message'];
+
+                SS_Log::log('Couldn\'t fetch URL: '.$d->ErrorMessage, SS_Log::INFO);
 
                 $d->write();
                 continue;
@@ -45,6 +47,8 @@ class CheckSSLCertificates implements CronTask {
                 while ($msg = openssl_error_string()) {
                     $d->ErrorMessage = $msg;
                 }
+
+                SS_Log::log('Couldn\'t decode cert: '.$d->ErrorMessage, SS_Log::WARN);
                 $d->write();
                 continue;
             }
@@ -58,6 +62,8 @@ class CheckSSLCertificates implements CronTask {
             if ($lastCert->exists() && $lastCert->Fingerprint === $fingerprint) {
                 // Still has the same cert, don't bother adding it again
                 $d->write();
+
+                SS_Log::log('Cert for '.$d->ID.' hasn\'t changed, not adding', SS_Log::DEBUG);
                 continue;
             }
 
@@ -75,6 +81,8 @@ class CheckSSLCertificates implements CronTask {
             $newCert->write();
 
             $d->write();
+
+            SS_Log::log('Adding new certificate for '.$d->ID, SS_Log::INFO);
         }
     }
 
