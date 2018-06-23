@@ -4,3 +4,7 @@ After:
   - 'framework/*'
   - 'cms/*'
 ---
+SiteConfig:
+  extensions:
+    - OpsGenieSiteConfigExtension
+    - SlackSiteConfigExtension

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e9b48ebcdf6f4e39a4cacef952f990a",
+    "content-hash": "f9e799617bd1d948223746b7f6e623fd",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.61.9",
+            "version": "3.62.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "57041356c1bb7fdcaba2e181feec56f854b52e38"
+                "reference": "2c9b27be62dce8a2b84918229d98f4eeb7f75056"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/57041356c1bb7fdcaba2e181feec56f854b52e38",
-                "reference": "57041356c1bb7fdcaba2e181feec56f854b52e38",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2c9b27be62dce8a2b84918229d98f4eeb7f75056",
+                "reference": "2c9b27be62dce8a2b84918229d98f4eeb7f75056",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-06-19T20:26:38+00:00"
+            "time": "2018-06-21T23:31:06+00:00"
         },
         {
             "name": "composer/installers",
@@ -460,6 +460,55 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "maknz/slack",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maknz/slack.git",
+                "reference": "7f21fefc70c76b304adc1b3a780c8740dfcfb595"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maknz/slack/zipball/7f21fefc70c76b304adc1b3a780c8740dfcfb595",
+                "reference": "7f21fefc70c76b304adc1b3a780c8740dfcfb595",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "~6.0|~5.0|~4.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "4.2.*"
+            },
+            "suggest": {
+                "illuminate/support": "Required for Laravel support"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maknz\\Slack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "maknz",
+                    "email": "github@mak.geek.nz"
+                }
+            ],
+            "description": "A simple PHP package for sending messages to Slack, with a focus on ease of use and elegant syntax. Includes Laravel support out of the box.",
+            "keywords": [
+                "laravel",
+                "slack"
+            ],
+            "time": "2015-06-03T03:35:16+00:00"
         },
         {
             "name": "mtdowling/cron-expression",

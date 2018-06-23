@@ -14,7 +14,7 @@ class CloudFlare {
      * @throws Exception
      */
     public function Zones() {
-        return self::request("zones");
+        return $this->request("zones");
     }
 
     /**

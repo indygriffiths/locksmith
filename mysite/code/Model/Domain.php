@@ -2,14 +2,16 @@
 
 class Domain extends DataObject {
     private static $db = [
-        'Domain'         => 'Varchar(255)',
-		'Source'         => 'Enum("Manual,CloudFlare,Incapsula")',
-		'SourceID'       => 'Text',
-		'Enabled'        => 'Boolean(1)',
-        'HasCertificate' => 'Boolean(0)',
-        'LastChecked'    => 'SS_DateTime',
-        'ErrorCode'      => 'Text',
-        'ErrorMessage'   => 'Text'
+        'Domain'             => 'Varchar(255)',
+        'Source'             => 'Enum("Manual,CloudFlare,Incapsula")',
+        'SourceID'           => 'Text',
+        'Enabled'            => 'Boolean(1)',
+        'LastChecked'        => 'SS_DateTime',
+        'ErrorCode'          => 'Text',
+        'ErrorMessage'       => 'Text',
+        'OpsGenieID'         => 'Text',
+        'AlertPriority'      => 'Text',
+        'AlertedCommonNameMismatch'     => 'Boolean(0)'
     ];
 
     private static $has_many = [
@@ -18,6 +20,7 @@ class Domain extends DataObject {
 
     private static $summary_fields = [
         'Domain'                       => 'Domain',
+        'LastCheckSuccessfulNice'      => 'Last Check Successful?',
         'HasValidCertificateNice'      => 'Has a Valid Certificate?',
         'CurrentCertificate.Name'      => 'Certificate Name',
         'CurrentCertificate.Issuer'    => 'Issuer',
@@ -46,9 +49,20 @@ class Domain extends DataObject {
                ->setRows(1)
                ->setDescription("The error code returned by stream_socket_client, or 999 if the certificate couldn't be read");
 
+        $fields->dataFieldByName('SourceID')
+               ->setRows(1);
+
         $fields->dataFieldByName('ErrorMessage')
-               ->setRows(1)
                ->setDescription("The error message returned by stream_socket_client or openssl_error_string");
+
+        $fields->dataFieldByName('OpsGenieID')
+               ->setRows(1)
+               ->setDescription('The ID of the OpsGenie alert for this domain. Set to empty if there is no alert');
+
+        $fields->dataFieldByName('AlertPriority')
+               ->setRows(1)
+               ->setReadonly(true)
+               ->setDescription('The current status of the OpsGenie alert (P5 to P1)');
 
         $fields->addFieldToTab('Root.Certificates', GridField::create(
             'Certificates',
@@ -106,7 +120,7 @@ class Domain extends DataObject {
      * @return bool True if the certificate has expired
      */
     public function HasValidCertificate() {
-        return $this->HasCertificate && $this->CurrentCertificate()->IsValid;
+        return $this->CurrentCertificate()->IsValid;
     }
 
     /**
@@ -114,5 +128,19 @@ class Domain extends DataObject {
      */
     public function HasValidCertificateNice() {
         return $this->HasValidCertificate() ? "Yes" : "No";
+    }
+
+    /**
+     * @return bool If the last check we performed was successful
+     */
+    public function LastCheckSuccessful() {
+        return empty($this->ErrorCode) && empty($this->ErrorMessage);
+    }
+
+    /**
+     * @return string If the last check we performed was successful
+     */
+    public function LastCheckSuccessfulNice() {
+        return $this->LastCheckSuccessful() ? "Yes" : "No";
     }
 }

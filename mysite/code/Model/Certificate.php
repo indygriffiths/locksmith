@@ -44,16 +44,12 @@ class Certificate extends DataObject {
         $fields->addFieldsToTab('Root.Main', [
             new ReadonlyField('Created', 'First Seen'),
             $isValid = new CheckboxField('IsValid', 'Certificate is Valid?'),
-            $isSelfSigned = new CheckboxField('IsSelfSigned', 'Is Self Signed?'),
-            $usesSha1 = new CheckboxField('UsesSha1Hash', 'Uses SHA-1 Hash?'),
         ]);
 
         $fields->dataFieldByName('Type')->setRows(1);
         $fields->dataFieldByName('Issuer')->setRows(1);
 
         $isValid->setDisabled(true);
-        $isSelfSigned->setDisabled(true);
-        $usesSha1->setDisabled(true);
 
         return $fields;
     }
@@ -64,23 +60,17 @@ class Certificate extends DataObject {
     public function getIsValid() {
         return (
             date('U', strtotime($this->ValidFrom)) < time() &&
-            date('U', strtotime($this->ValidTo)) >= time() &&
-            !$this->IsSelfSigned &&
-            !$this->UsesSha1Hash
+            date('U', strtotime($this->ValidTo)) >= time()
         );
     }
 
     /**
-     * @return bool True if the issuer is the current domain
+     * @return int Number of days until the certificate expires. Can return a negative number
      */
-    public function getIsSelfSigned() {
-        return $this->Issuer === $this->Domain()->Domain;
-    }
+    public function getDaysUntilExpiration() {
+        $earlier = new DateTime();
+        $later = new DateTime($this->ValidTo);
 
-    /**
-     * @return bool True if the certificate uses an older SHA1 hash
-     */
-    public function getUsesSha1Hash() {
-        return $this->Type === 'RSA-SHA1';
+        return (int)$earlier->diff($later)->format("%r%a");
     }
 }
