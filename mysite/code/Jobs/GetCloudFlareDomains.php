@@ -3,7 +3,7 @@
 /**
  * Gets all domains from CloudFlare every hour and adds them to the site
  */
-class GetCloudFlareDomains implements CronTask {
+class GetCloudFlareDomains extends BaseCronTask {
 
     /**
      * @return string
@@ -16,7 +16,6 @@ class GetCloudFlareDomains implements CronTask {
      * @throws ValidationException
      */
     public function process() {
-        // Get all existing domains
         $domains = Domain::get()->filter(['Source' => 'CloudFlare'])->column('SourceID');
 
         $cf = new CloudFlare();
@@ -33,7 +32,7 @@ class GetCloudFlareDomains implements CronTask {
             $newDomain->SourceID = $z->id;
             $newDomain->write();
 
-            echo 'Added '.htmlspecialchars($z->name).'<br>';
+            $this->log("Added ".htmlspecialchars($z->name), SS_Log::INFO);
         }
     }
 }

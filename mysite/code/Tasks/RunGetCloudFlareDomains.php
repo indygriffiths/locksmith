@@ -1,14 +1,10 @@
 <?php
 
-/**
- * Get all domains from CloudFlare and adds them to the site
- * if they don't already exist
- */
-class CloudFlareDomains extends BuildTask {
+class RunGetCloudFlareDomains extends BuildTask {
 
     protected $title = 'Add Domains from CloudFlare';
 
-    protected $description = 'Pulls all zones from CloudFlare and adds them as domains to the site';
+    protected $description = 'Runs the CronTask that adds all zones from CloudFlare and adds them as domains to the site';
 
     /**
      * @param SS_HTTPRequest $request

@@ -68,9 +68,11 @@ class Certificate extends DataObject {
      * @return int Number of days until the certificate expires. Can return a negative number
      */
     public function getDaysUntilExpiration() {
-        $earlier = new DateTime();
-        $later = new DateTime($this->ValidTo);
+        // Ignore times, they just end in more confusion
+        $earlier = new DateTime(date('Y-m-d'));
+        $later = new DateTime(date('Y-m-d', strtotime($this->ValidTo)));
 
-        return (int)$earlier->diff($later)->format("%r%a");
+        // We use %r%a to ensure we provide a - if the number of days is a negative
+        return $earlier->diff($later)->format("%r%a");
     }
 }

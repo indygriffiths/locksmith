@@ -5,11 +5,12 @@
  */
 class SlackSiteConfigExtension extends DataExtension {
     private static $db = [
-        'SlackChannel' => 'Varchar(100)',
-        'SlackEmoji' => 'Varchar(100)',
-        'SlackPostOnCertificateUpdate' => 'Boolean(1)',
+        'SlackChannel'                  => 'Varchar(100)',
+        'SlackEmoji'                    => 'Varchar(100)',
+        'SlackPostDailyUpdate'          => 'Boolean(1)',
+        'SlackPostOnCertificateUpdate'  => 'Boolean(1)',
         'SlackPostOnCommonNameMismatch' => 'Boolean(1)',
-        'SlackPostOnCheckFailure' => 'Boolean(1)',
+        'SlackPostOnCheckFailure'       => 'Boolean(1)',
     ];
 
     private static $defaults = [
@@ -24,6 +25,7 @@ class SlackSiteConfigExtension extends DataExtension {
         $fields->addFieldsToTab('Root.Slack', [
             new TextField('SlackChannel', 'Slack Channel'),
             new TextField('SlackEmoji', 'Slack Emoji'),
+            new CheckboxField('SlackPostDailyUpdate', 'Post to Slack every day with the upcoming certificate renewals'),
             new CheckboxField('SlackPostOnCertificateUpdate', 'Post to Slack when a certificate is updated'),
             new CheckboxField('SlackPostOnCheckFailure', 'Post to Slack when a certificate check has failed after being successful'),
             new CheckboxField('SlackPostOnCommonNameMismatch', 'Post to Slack when a certificate has a common name mismatch'),

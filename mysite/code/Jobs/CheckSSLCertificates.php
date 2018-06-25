@@ -3,7 +3,7 @@
 /**
  * Goes through all domains and checks their SSL certificates
  */
-class CheckSSLCertificates implements CronTask {
+class CheckSSLCertificates extends BaseCronTask {
     /**
      * @return string
      */
@@ -261,18 +261,5 @@ class CheckSSLCertificates implements CronTask {
             'color'  => 'danger',
             'title' => $error
         ])->send("A common name mismatch has been detected for domain ".$site->Domain);
-    }
-
-    /**
-     * @param     $message
-     * @param int $level
-     */
-    private function log($message, $level = SS_Log::INFO) {
-        SS_Log::log($message, $level);
-        if(Director::is_cli()) {
-            echo $message.PHP_EOL;
-        } else {
-            echo $message."<br>".PHP_EOL;
-        }
     }
 }

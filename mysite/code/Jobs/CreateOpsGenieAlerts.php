@@ -4,7 +4,7 @@
  * Goes through all domains, checks their certificate expiry, and creates or upgrades
  * OpsGenie alerts for the approaching expiration
  */
-class CheckCertificateExpiration implements CronTask {
+class CreateOpsGenieAlerts extends BaseCronTask {
     /**
      * @return string
      */
@@ -99,38 +99,6 @@ class CheckCertificateExpiration implements CronTask {
                 $d->AlertPriority = $priority;
                 $d->write();
             }
-        }
-    }
-
-    /**
-     * Returns the closest key from an array using its values
-     * @param int   $number
-     * @param array $array
-     * @return null
-     */
-    public function closestNumber($number, $array) {
-        asort($array);
-        foreach($array as $key => $a) {
-            if($a >= $number) {
-                return $key;
-            }
-        }
-        end($array);
-
-        return key($array);
-    }
-
-
-    /**
-     * @param     $message
-     * @param int $level
-     */
-    private function log($message, $level = SS_Log::INFO) {
-        SS_Log::log($message, $level);
-        if(Director::is_cli()) {
-            echo $message.PHP_EOL;
-        } else {
-            echo $message."<br>".PHP_EOL;
         }
     }
 }

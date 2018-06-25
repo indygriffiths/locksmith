@@ -3,11 +3,11 @@
 /**
  * Checks all domains for their certificates
  */
-class CheckCertificates extends BuildTask {
+class RunCheckCertificates extends BuildTask {
 
     protected $title = 'Check SSL certificates';
 
-    protected $description = 'Connects to each domain and checks what certificate is loaded, if any, and adds it to the domain';
+    protected $description = 'Runs the CronTask that connects to each domain and checks what certificate is loaded, if any, and adds it to the domain';
 
     /**
      * @param SS_HTTPRequest $request
