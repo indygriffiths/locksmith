@@ -1,9 +1,11 @@
 <?php
 
 /**
- * Class for managing CronTasks
+ * Trait for managing some CronTask jobs.
+ * This would've been an abstract class but sake didn't appear to like that and threw exceptions
  */
-abstract class BaseCronTask implements CronTask {
+trait CronTaskUtilities {
+
     /**
      * @param     $message
      * @param int $level

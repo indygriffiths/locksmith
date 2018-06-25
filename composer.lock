@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9e799617bd1d948223746b7f6e623fd",
+    "content-hash": "50b20662600e09fc8d6d7b3f37b96f82",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1027,6 +1027,48 @@
                 "siteconfig"
             ],
             "time": "2018-06-08T00:19:37+00:00"
+        },
+        {
+            "name": "stevie-mayhew/trait-loader",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stevie-mayhew/trait-loader.git",
+                "reference": "106cec9a354912a5d2fb4a40fde4ee192994f1c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stevie-mayhew/trait-loader/zipball/106cec9a354912a5d2fb4a40fde4ee192994f1c2",
+                "reference": "106cec9a354912a5d2fb4a40fde4ee192994f1c2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "silverstripe/framework": "~3.1"
+            },
+            "replace": {
+                "simonwelsh/trait-loader": "*"
+            },
+            "type": "silverstripe-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Simon Welsh",
+                    "email": "simon@simon.geek.nz",
+                    "homepage": "http://coding.simon.geek.nz/"
+                }
+            ],
+            "description": "Adds trait autoloading support to SilverStripe",
+            "homepage": "https://github.com/stevie-mayhew/trait-loader",
+            "keywords": [
+                "autoload",
+                "silverstripe",
+                "traits"
+            ],
+            "time": "2016-07-27T00:10:18+00:00"
         }
     ],
     "packages-dev": [

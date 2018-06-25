@@ -5,7 +5,8 @@ use Maknz\Slack\Attachment;
 /**
  * Class for posting to Slack the certificates expiring soon
  */
-class DailyExpirationReminder extends BaseCronTask {
+class DailyExpirationReminder implements CronTask {
+    use CronTaskUtilities;
 
     /**
      * @return string Cron expression

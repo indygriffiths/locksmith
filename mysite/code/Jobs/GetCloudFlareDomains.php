@@ -3,7 +3,8 @@
 /**
  * Gets all domains from CloudFlare every hour and adds them to the site
  */
-class GetCloudFlareDomains extends BaseCronTask {
+class GetCloudFlareDomains implements CronTask {
+    use CronTaskUtilities;
 
     /**
      * @return string

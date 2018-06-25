@@ -4,7 +4,9 @@
  * Goes through all domains, checks their certificate expiry, and creates or upgrades
  * OpsGenie alerts for the approaching expiration
  */
-class CreateOpsGenieAlerts extends BaseCronTask {
+class CreateOpsGenieAlerts implements CronTask {
+    use CronTaskUtilities;
+
     /**
      * @return string
      */

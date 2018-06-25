@@ -3,7 +3,9 @@
 /**
  * Goes through all domains and checks their SSL certificates
  */
-class CheckSSLCertificates extends BaseCronTask {
+class CheckSSLCertificates implements CronTask {
+    use CronTaskUtilities;
+
     /**
      * @return string
      */
