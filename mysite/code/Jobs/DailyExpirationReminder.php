@@ -57,13 +57,15 @@ class DailyExpirationReminder extends BaseCronTask {
             $this->log('Current alert priority: '.$priority, SS_Log::DEBUG);
 
             // Create the line for this domain with a link to open it in the tool
-            $alerts[$priority][] = sprintf(
-                "%s (expires <%s/admin/domains/Domain/EditForm/field/Domain/item/%s/edit|%s>)",
+            $line = sprintf(
+                "%s, expires <%s/admin/domains/Domain/EditForm/field/Domain/item/%s/edit|%s>",
                 $d->Domain,
                 Director::absoluteBaseURL(),
                 $d->ID,
                 $cert->ValidTo
             );
+
+            $alerts[$priority][] = $line;
         }
 
         if(empty($alerts)) {
@@ -94,7 +96,7 @@ class DailyExpirationReminder extends BaseCronTask {
             ]);
         }
 
-        $client->setAttachments($attachments)->send("Upcoming certificate renewals");
+        $client->setAttachments($attachments)->send("Certificates expiring soon are listed below. This alert is sent every day at 10am by <https://platform.silverstripe.com/naut/project/locksmit|Locksmith>.");
     }
 
     /**
