@@ -20,13 +20,13 @@ class GetCloudFlareDomains implements CronTask
      */
     public function process()
     {
-        $domains = Domain::get()->filter(['Source' => 'CloudFlare'])->column('SourceID');
+        $domains = Domain::get()->column('Domain');
 
         $cf = new CloudFlare();
         $zones = $cf->Zones();
 
         foreach ($zones as $z) {
-            if (in_array($z->id, $domains, true)) {
+            if (in_array($z->name, $domains)) {
                 continue;
             }
 

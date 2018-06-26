@@ -20,13 +20,13 @@ class GetIncapsulaDomains implements CronTask
      */
     public function process()
     {
-        $domains = Domain::get()->filter(['Source' => 'Incapsula'])->column('SourceID');
+        $domains = Domain::get()->column('Domain');
 
         $cf = new Incapsula();
         $zones = $cf->Sites();
 
         foreach ($zones as $z) {
-            if (in_array($z->site_id, $domains, true)) {
+            if (in_array($z->domain, $domains)) {
                 continue;
             }
 
