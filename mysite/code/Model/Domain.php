@@ -134,7 +134,9 @@ class Domain extends DataObject {
      * @return bool If the last check we performed was successful
      */
     public function LastCheckSuccessful() {
-        return empty($this->ErrorCode) && empty($this->ErrorMessage);
+        return empty($this->ErrorCode) &&
+               empty($this->ErrorMessage) &&
+               !empty($this->LastChecked);
     }
 
     /**

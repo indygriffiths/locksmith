@@ -235,7 +235,7 @@ class CheckSSLCertificates implements CronTask {
         $client->attach([
             'color'  => 'danger',
             'title' => $error
-        ])->send("The certificate check for ".$site->Domain." is now failing");
+        ])->send("The certificate check for ".$site->Domain." is failing");
     }
 
     /**

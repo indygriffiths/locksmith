@@ -37,10 +37,6 @@ class CloudFlare {
 
             $finalResults = array_merge($finalResults, $newResults->results);
             $page++;
-
-            if ($page == 5) {
-                die('Circuit breaker hit');
-            }
         }
 
         return $finalResults;
@@ -71,7 +67,6 @@ class CloudFlare {
             'X-Auth-Email:'.CLOUDFLARE_USER_EMAIL
         ]);
 
-
         if ($method === 'POST') {
             curl_setopt($c, CURLOPT_POST, 1);
             curl_setopt($c, CURLOPT_POSTFIELDS, http_build_query($params));
@@ -83,7 +78,7 @@ class CloudFlare {
         $result = json_decode($result);
 
         if (!$result->success) {
-            throw new \Exception("Failed to request");
+            throw new \Exception("Failed to request: ".$result->error);
         }
 
         return $result;
