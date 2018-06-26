@@ -69,8 +69,6 @@ class Incapsula
         $result = curl_exec($c);
         curl_close($c);
 
-        SS_Log::log(sprintf('Received response from Incapsula for request submitted by %s: %s', Member::currentUserID(), $result), SS_Log::INFO);
-
         return json_decode($result);
     }
 }
