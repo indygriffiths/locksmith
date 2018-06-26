@@ -16,3 +16,4 @@ siteconfig/
 crontask/
 environmentcheck/
 trait-loader/
+*.cache

@@ -1,16 +1,17 @@
 <?php
 
 /**
- * Class for managing OpsGenie settings around alerting for expiring certificates
+ * Class for managing OpsGenie settings around alerting for expiring certificates.
  */
-class OpsGenieSiteConfigExtension extends DataExtension {
+class OpsGenieSiteConfigExtension extends DataExtension
+{
     private static $db = [
         'CreateOpsGenieAlert' => 'Boolean(0)',
         'OpsGenieDaysUntilP5' => 'Int',
         'OpsGenieDaysUntilP4' => 'Int',
         'OpsGenieDaysUntilP3' => 'Int',
         'OpsGenieDaysUntilP2' => 'Int',
-        'OpsGenieDaysUntilP1' => 'Int'
+        'OpsGenieDaysUntilP1' => 'Int',
     ];
 
     private static $defaults = [
@@ -18,12 +19,13 @@ class OpsGenieSiteConfigExtension extends DataExtension {
         'OpsGenieDaysUntilP4' => 14,
         'OpsGenieDaysUntilP3' => 7,
         'OpsGenieDaysUntilP2' => 3,
-        'OpsGenieDaysUntilP1' => 0
+        'OpsGenieDaysUntilP1' => 0,
     ];
 
-    public function updateCMSFields(FieldList $fields) {
-        if(!defined('OPSGENIE_API_KEY')) {
-            $fields->addFieldToTab('Root.OpsGenie', new LiteralField("MissingOpsGenieKey", "<p class=\"message warning\">OPSGENIE_API_KEY not defined, integration is disabled</p>"));
+    public function updateCMSFields(FieldList $fields)
+    {
+        if (!defined('OPSGENIE_API_KEY')) {
+            $fields->addFieldToTab('Root.OpsGenie', new LiteralField('MissingOpsGenieKey', '<p class="message warning">OPSGENIE_API_KEY not defined, integration is disabled</p>'));
         }
 
         $fields->addFieldsToTab('Root.OpsGenie', [

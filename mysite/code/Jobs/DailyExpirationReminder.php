@@ -3,21 +3,24 @@
 use Maknz\Slack\Attachment;
 
 /**
- * Class for posting to Slack the certificates expiring soon
+ * Class for posting to Slack the certificates expiring soon.
  */
-class DailyExpirationReminder implements CronTask {
+class DailyExpirationReminder implements CronTask
+{
     use CronTaskUtilities;
 
     /**
      * @return string Cron expression
      */
-    public function getSchedule() {
-        return "0 10 * * *";
+    public function getSchedule()
+    {
+        return '0 10 * * *';
     }
 
-    public function process() {
+    public function process()
+    {
         $siteConfig = SiteConfig::current_site_config();
-        if(!defined('SLACK_WEBHOOK_URL') || !$siteConfig->SlackPostDailyUpdate) {
+        if (!defined('SLACK_WEBHOOK_URL') || !$siteConfig->SlackPostDailyUpdate) {
             $this->log('Slack not enabled, task not running', SS_Log::INFO);
 
             return;
@@ -31,16 +34,16 @@ class DailyExpirationReminder implements CronTask {
             'P4' => $siteConfig->OpsGenieDaysUntilP4,
             'P3' => $siteConfig->OpsGenieDaysUntilP3,
             'P2' => $siteConfig->OpsGenieDaysUntilP2,
-            'P1' => $siteConfig->OpsGenieDaysUntilP1
+            'P1' => $siteConfig->OpsGenieDaysUntilP1,
         ];
-
 
         $startAlerting = max(array_values($alertDays));
         $alerts = [];
 
-        foreach($domains as $d) {
-            if(!$d->CurrentCertificate()->exists()) {
+        foreach ($domains as $d) {
+            if (!$d->CurrentCertificate()->exists()) {
                 $this->log('Skipping '.$d->Domain.' as it doesn\'t have a certificate', SS_Log::INFO);
+
                 continue;
             }
 
@@ -50,7 +53,7 @@ class DailyExpirationReminder implements CronTask {
             $this->log('Days until expiration: '.$cert->DaysUntilExpiration, SS_Log::DEBUG);
 
             // Skip if we're outside the alerting threshold
-            if($cert->DaysUntilExpiration > $startAlerting) {
+            if ($cert->DaysUntilExpiration > $startAlerting) {
                 continue;
             }
 
@@ -59,7 +62,7 @@ class DailyExpirationReminder implements CronTask {
 
             // Create the line for this domain with a link to open it in the tool
             $line = sprintf(
-                "%s, expires <%s/admin/domains/Domain/EditForm/field/Domain/item/%s/edit|%s>",
+                '%s, expires <%s/admin/domains/Domain/EditForm/field/Domain/item/%s/edit|%s>',
                 $d->Domain,
                 Director::absoluteBaseURL(),
                 $d->ID,
@@ -69,8 +72,9 @@ class DailyExpirationReminder implements CronTask {
             $alerts[$priority][] = $line;
         }
 
-        if(empty($alerts)) {
+        if (empty($alerts)) {
             $this->log('No domains to alert to, bailing', SS_Log::INFO);
+
             return;
         }
 
@@ -80,45 +84,48 @@ class DailyExpirationReminder implements CronTask {
         ksort($alerts);
 
         $settings = [
-            'username'   => SiteConfig::current_site_config()->Title,
-            'channel'    => SiteConfig::current_site_config()->SlackChannel,
-            'icon'       => SiteConfig::current_site_config()->SlackEmoji
+            'username' => SiteConfig::current_site_config()->Title,
+            'channel' => SiteConfig::current_site_config()->SlackChannel,
+            'icon' => SiteConfig::current_site_config()->SlackEmoji,
         ];
 
         $client = new Maknz\Slack\Client(SLACK_WEBHOOK_URL, $settings);
         $attachments = [];
 
-        foreach($alerts as $priority => $lines) {
+        foreach ($alerts as $priority => $lines) {
             $attachments[] = new Attachment([
-                'color'  => $this->alertColor($priority),
-                'author_name' => sprintf("%s (%d days or less)", $priority, $alertDays[$priority]),
+                'color' => $this->alertColor($priority),
+                'author_name' => sprintf('%s (%d days or less)', $priority, $alertDays[$priority]),
                 'text' => implode("\n", $lines),
-                'mrkdwn_in' => ['text']
+                'mrkdwn_in' => ['text'],
             ]);
         }
 
-        $client->setAttachments($attachments)->send("Certificates expiring soon are listed below. This alert is sent every day at 10am by <https://platform.silverstripe.com/naut/project/locksmit|Locksmith>.");
+        $client->setAttachments($attachments)->send('Certificates expiring soon are listed below. This alert is sent every day at 10am by <https://platform.silverstripe.com/naut/project/locksmit|Locksmith>.');
     }
 
     /**
-     * Returns the color for the alert priority when posting to Slack
+     * Returns the color for the alert priority when posting to Slack.
+     *
      * @param $priority
+     *
      * @return string Hex color code
      */
-    protected function alertColor($priority) {
-        switch($priority) {
-            case "P5":
-                return "#1b8220";
-            case "P4":
-                return "#71ce11";
-            case "P3":
-                return "#f3c717";
-            case "P2":
-                return "#FC8C45";
-            case "P1":
-                return "#EF0909";
+    protected function alertColor($priority)
+    {
+        switch ($priority) {
+            case 'P5':
+                return '#1b8220';
+            case 'P4':
+                return '#71ce11';
+            case 'P3':
+                return '#f3c717';
+            case 'P2':
+                return '#FC8C45';
+            case 'P1':
+                return '#EF0909';
             default:
-                return "#1b8220";
+                return '#1b8220';
         }
     }
 }

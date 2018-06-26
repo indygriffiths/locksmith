@@ -1,44 +1,46 @@
 <?php
 
 /**
- * Class for representing a SSL certificate
+ * Class for representing a SSL certificate.
  */
-class Certificate extends DataObject {
+class Certificate extends DataObject
+{
     private static $db = [
-        'Name'        => 'Text',
-        'Type'        => 'Text',
-        'Issuer'      => 'Text',
-        'Domains'     => 'Text',
-        'Serial'      => 'Varchar(100)',
+        'Name' => 'Text',
+        'Type' => 'Text',
+        'Issuer' => 'Text',
+        'Domains' => 'Text',
+        'Serial' => 'Varchar(100)',
         'Fingerprint' => 'Varchar(100)',
-        'ValidFrom'   => 'SS_DateTime',
-        'ValidTo'     => 'SS_DateTime',
+        'ValidFrom' => 'SS_DateTime',
+        'ValidTo' => 'SS_DateTime',
     ];
 
     private static $has_one = [
-        "Domain" => "Domain",
+        'Domain' => 'Domain',
     ];
 
     private static $indexes = [
-        'Serial' => true
+        'Serial' => true,
     ];
 
     private static $summary_fields = [
-        'ID'        => 'ID',
-        'Name'      => 'Certificate Name',
-        'Type'      => 'Type',
-        'Issuer'    => 'Issuer',
-        'Serial'    => 'Serial',
+        'ID' => 'ID',
+        'Name' => 'Certificate Name',
+        'Type' => 'Type',
+        'Issuer' => 'Issuer',
+        'Serial' => 'Serial',
         'ValidFrom' => 'Valid From',
-        'ValidTo'   => 'Valid Until',
+        'ValidTo' => 'Valid Until',
     ];
 
-    private static $default_sort = "ID DESC";
+    private static $default_sort = 'ID DESC';
 
     /**
      * @return FieldList
      */
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
 
         $fields->addFieldsToTab('Root.Main', [
@@ -57,22 +59,24 @@ class Certificate extends DataObject {
     /**
      * @return bool True if the certificate has expired
      */
-    public function getIsValid() {
-        return (
+    public function getIsValid()
+    {
+        return
             date('U', strtotime($this->ValidFrom)) < time() &&
             date('U', strtotime($this->ValidTo)) >= time()
-        );
+        ;
     }
 
     /**
      * @return int Number of days until the certificate expires. Can return a negative number
      */
-    public function getDaysUntilExpiration() {
+    public function getDaysUntilExpiration()
+    {
         // Ignore times, they just end in more confusion
         $earlier = new DateTime(date('Y-m-d'));
         $later = new DateTime(date('Y-m-d', strtotime($this->ValidTo)));
 
         // We use %r%a to ensure we provide a - if the number of days is a negative
-        return $earlier->diff($later)->format("%r%a");
+        return $earlier->diff($later)->format('%r%a');
     }
 }

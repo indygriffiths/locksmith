@@ -1,29 +1,32 @@
 <?php
 
 /**
- * Gets all domains from Incapsula every hour and adds them to the site
+ * Gets all domains from Incapsula every hour and adds them to the site.
  */
-class GetIncapsulaDomains implements CronTask {
+class GetIncapsulaDomains implements CronTask
+{
     use CronTaskUtilities;
 
     /**
      * @return string
      */
-    public function getSchedule() {
-        return "0 * * * *";
+    public function getSchedule()
+    {
+        return '0 * * * *';
     }
 
     /**
      * @throws ValidationException
      */
-    public function process() {
+    public function process()
+    {
         $domains = Domain::get()->filter(['Source' => 'Incapsula'])->column('SourceID');
 
         $cf = new Incapsula();
         $zones = $cf->Sites();
 
         foreach ($zones as $z) {
-            if (in_array($z->site_id, $domains)) {
+            if (in_array($z->site_id, $domains, true)) {
                 continue;
             }
 
@@ -33,7 +36,7 @@ class GetIncapsulaDomains implements CronTask {
             $newDomain->SourceID = $z->site_id;
             $newDomain->write();
 
-            $this->log("Added ".htmlspecialchars($z->domain), SS_Log::INFO);
+            $this->log('Added '.htmlspecialchars($z->domain), SS_Log::INFO);
         }
     }
 }

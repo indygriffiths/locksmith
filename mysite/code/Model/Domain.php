@@ -1,68 +1,70 @@
 <?php
 
-class Domain extends DataObject {
+class Domain extends DataObject
+{
     private static $db = [
-        'Domain'             => 'Varchar(255)',
-        'Source'             => 'Enum("Manual,CloudFlare,Incapsula")',
-        'SourceID'           => 'Text',
-        'Enabled'            => 'Boolean(1)',
-        'LastChecked'        => 'SS_DateTime',
-        'ErrorCode'          => 'Text',
-        'ErrorMessage'       => 'Text',
-        'OpsGenieID'         => 'Text',
-        'AlertPriority'      => 'Text',
-        'AlertedCommonNameMismatch'     => 'Boolean(0)'
+        'Domain' => 'Varchar(255)',
+        'Source' => 'Enum("Manual,CloudFlare,Incapsula")',
+        'SourceID' => 'Text',
+        'Enabled' => 'Boolean(1)',
+        'LastChecked' => 'SS_DateTime',
+        'ErrorCode' => 'Text',
+        'ErrorMessage' => 'Text',
+        'OpsGenieID' => 'Text',
+        'AlertPriority' => 'Text',
+        'AlertedCommonNameMismatch' => 'Boolean(0)',
     ];
 
     private static $has_many = [
-        "Certificates" => "Certificate",
+        'Certificates' => 'Certificate',
     ];
 
     private static $summary_fields = [
-        'Domain'                       => 'Domain',
-        'LastCheckSuccessfulNice'      => 'Last Check Successful?',
-        'HasValidCertificateNice'      => 'Has a Valid Certificate?',
-        'CurrentCertificate.Name'      => 'Certificate Name',
-        'CurrentCertificate.Issuer'    => 'Issuer',
+        'Domain' => 'Domain',
+        'LastCheckSuccessfulNice' => 'Last Check Successful?',
+        'HasValidCertificateNice' => 'Has a Valid Certificate?',
+        'CurrentCertificate.Name' => 'Certificate Name',
+        'CurrentCertificate.Issuer' => 'Issuer',
         'CurrentCertificate.ValidFrom' => 'Valid From',
-        'CurrentCertificate.ValidTo'   => 'Valid Until',
-        'Enabled.Nice'                 => 'Enabled',
+        'CurrentCertificate.ValidTo' => 'Valid Until',
+        'Enabled.Nice' => 'Enabled',
     ];
 
     private static $defaults = [
-        'Enabled' => true
+        'Enabled' => true,
     ];
 
     /**
      * @return FieldList
      */
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
 
         $fields->dataFieldByName('Domain')
-               ->setDescription("The domain to check, without the protocol");
+            ->setDescription('The domain to check, without the protocol');
 
         $fields->dataFieldByName('Enabled')
-               ->setDescription("Untick to prevent future checks for this domain");
+            ->setDescription('Untick to prevent future checks for this domain');
 
         $fields->dataFieldByName('ErrorCode')
-               ->setRows(1)
-               ->setDescription("The error code returned by stream_socket_client, or 999 if the certificate couldn't be read");
+            ->setRows(1)
+            ->setDescription("The error code returned by stream_socket_client, or 999 if the certificate couldn't be read");
 
         $fields->dataFieldByName('SourceID')
-               ->setRows(1);
+            ->setRows(1);
 
         $fields->dataFieldByName('ErrorMessage')
-               ->setDescription("The error message returned by stream_socket_client or openssl_error_string");
+            ->setDescription('The error message returned by stream_socket_client or openssl_error_string');
 
         $fields->dataFieldByName('OpsGenieID')
-               ->setRows(1)
-               ->setDescription('The ID of the OpsGenie alert for this domain. Set to empty if there is no alert');
+            ->setRows(1)
+            ->setDescription('The ID of the OpsGenie alert for this domain. Set to empty if there is no alert');
 
         $fields->dataFieldByName('AlertPriority')
-               ->setRows(1)
-               ->setReadonly(true)
-               ->setDescription('The current status of the OpsGenie alert (P5 to P1)');
+            ->setRows(1)
+            ->setReadonly(true)
+            ->setDescription('The current status of the OpsGenie alert (P5 to P1)');
 
         $fields->addFieldToTab('Root.Certificates', GridField::create(
             'Certificates',
@@ -77,12 +79,13 @@ class Domain extends DataObject {
         return $fields;
     }
 
-    public function onBeforeWrite() {
+    public function onBeforeWrite()
+    {
         parent::onBeforeWrite();
 
         // Strip out the protocol
-        if(strpos($this->Domain, "//") === false) {
-            $this->Domain = "http://".$this->Domain;
+        if (false === strpos($this->Domain, '//')) {
+            $this->Domain = 'http://'.$this->Domain;
         }
 
         $this->Domain = parse_url($this->Domain, PHP_URL_HOST);
@@ -91,25 +94,28 @@ class Domain extends DataObject {
     /**
      * @return RequiredFields
      */
-    public function getCMSValidator() {
+    public function getCMSValidator()
+    {
         return new RequiredFields('Domain');
     }
-
 
     /**
      * @return mixed
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->Domain;
     }
 
     /**
-     * Returns the current cert for the site
+     * Returns the current cert for the site.
+     *
      * @return Certificate
      */
-    public function CurrentCertificate() {
+    public function CurrentCertificate()
+    {
         $cert = $this->Certificates()->sort('ID DESC')->limit(1);
-        if(!$cert || !$cert->first()) {
+        if (!$cert || !$cert->first()) {
             return Certificate::create();
         }
 
@@ -119,21 +125,24 @@ class Domain extends DataObject {
     /**
      * @return bool True if the certificate has expired
      */
-    public function HasValidCertificate() {
+    public function HasValidCertificate()
+    {
         return $this->CurrentCertificate()->IsValid;
     }
 
     /**
      * @return string Yes if the certificate has expired
      */
-    public function HasValidCertificateNice() {
-        return $this->HasValidCertificate() ? "Yes" : "No";
+    public function HasValidCertificateNice()
+    {
+        return $this->HasValidCertificate() ? 'Yes' : 'No';
     }
 
     /**
      * @return bool If the last check we performed was successful
      */
-    public function LastCheckSuccessful() {
+    public function LastCheckSuccessful()
+    {
         return empty($this->ErrorCode) &&
                empty($this->ErrorMessage) &&
                !empty($this->LastChecked);
@@ -142,7 +151,8 @@ class Domain extends DataObject {
     /**
      * @return string If the last check we performed was successful
      */
-    public function LastCheckSuccessfulNice() {
-        return $this->LastCheckSuccessful() ? "Yes" : "No";
+    public function LastCheckSuccessfulNice()
+    {
+        return $this->LastCheckSuccessful() ? 'Yes' : 'No';
     }
 }
