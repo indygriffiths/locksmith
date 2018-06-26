@@ -8,7 +8,8 @@
 		"silverstripe/dynamodb": "^3.0",
 		"silverstripe/crontask": "^1.1",
 		"maknz/slack": "^1.7",
-		"stevie-mayhew/trait-loader": "^1.0"
+		"stevie-mayhew/trait-loader": "^1.0",
+		"colymba/silverstripe-restfulapi": "^2.1"
 	},
 	"require-dev": {
 		"phpunit/PHPUnit": "~4.8"

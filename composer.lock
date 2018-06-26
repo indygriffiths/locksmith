@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50b20662600e09fc8d6d7b3f37b96f82",
+    "content-hash": "742dd8261dd28ce131e213849fffbb08",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -85,6 +85,49 @@
                 "sdk"
             ],
             "time": "2018-06-22T22:41:36+00:00"
+        },
+        {
+            "name": "colymba/silverstripe-restfulapi",
+            "version": "v2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colymba/silverstripe-restfulapi.git",
+                "reference": "5833442bd38279d50cfd9cf0f086593393d624a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colymba/silverstripe-restfulapi/zipball/5833442bd38279d50cfd9cf0f086593393d624a5",
+                "reference": "5833442bd38279d50cfd9cf0f086593393d624a5",
+                "shasum": ""
+            },
+            "require": {
+                "silverstripe/framework": "~3.1"
+            },
+            "type": "silverstripe-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD Simplified"
+            ],
+            "authors": [
+                {
+                    "name": "Thierry Francois",
+                    "homepage": "http://colymba.com"
+                }
+            ],
+            "description": "SilverStripe 3 RESTful API with a default JSON serializer.",
+            "homepage": "https://github.com/colymba/silverstripe-model-serializer",
+            "keywords": [
+                "REST API",
+                "REST server",
+                "RESTful server",
+                "api",
+                "json api",
+                "model serializer",
+                "rest",
+                "restful",
+                "silverstripe"
+            ],
+            "time": "2017-06-12T19:31:51+00:00"
         },
         {
             "name": "composer/installers",

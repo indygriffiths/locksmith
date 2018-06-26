@@ -8,3 +8,11 @@ SiteConfig:
   extensions:
     - OpsGenieSiteConfigExtension
     - SlackSiteConfigExtension
+Domain:
+  api_access: true
+Certificate:
+  api_access: true
+RESTfulAPI:
+  embedded_records:
+    Domain:
+      - Certificates
