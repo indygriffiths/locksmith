@@ -40,7 +40,7 @@ class CheckSSLCertificates implements CronTask
             $lastCert = $d->CurrentCertificate();
             $hasValidCert = ($lastCert->exists() && $lastCert->IsValid);
             if ($hasValidCert) {
-                $this->log($d->Domain.' has a valid certificate', SS_Log::INFO);
+                $this->log($d->Domain.' has an existing valid certificate', SS_Log::INFO);
             }
 
             // Get the socket stream and check if it failed
@@ -49,17 +49,18 @@ class CheckSSLCertificates implements CronTask
                 $this->log('Couldn\'t fetch for domain '.$d->Domain.': '.$stream['message'], SS_Log::INFO);
 
                 if ($d->LastCheckSuccessful()) {
-                    $this->notifyFailure($d, $stream['message']);
+                    if (!$d->AlertedCommonNameMismatch && false !== stripos($stream['message'], 'did not match expected CN')) {
+                        // Notify Ops about the mismatch, but only once
+                        $this->notifyCommonNameMismatch($d, $stream['message']);
+                        $d->AlertedCommonNameMismatch = true;
+                    } else {
+                        // Notify on the general failure
+                        $this->notifyFailure($d, $stream['message']);
+                    }
                 }
 
                 $d->ErrorCode = $stream['code'];
                 $d->ErrorMessage = $stream['message'];
-
-                if (!$d->AlertedCommonNameMismatch && false !== stripos($stream['message'], 'did not match expected CN')) {
-                    // Notify Ops about the mismatch, but only once
-                    $this->notifyCommonNameMismatch($d, $stream['message']);
-                    $d->AlertedCommonNameMismatch = true;
-                }
 
                 $d->write();
 
@@ -204,7 +205,7 @@ class CheckSSLCertificates implements CronTask
         $client->attach([
             'color' => 'danger',
             'title' => $error,
-        ])->send('The certificate check for '.$site->Domain.' is failing');
+        ])->send('The certificate check for '.$site->Domain.' is failing. HTTPS requests to this domain may be failing for end-users.');
     }
 
     /**
@@ -233,7 +234,7 @@ class CheckSSLCertificates implements CronTask
         $client->attach([
             'color' => 'danger',
             'title' => $error,
-        ])->send('A common name mismatch has been detected for domain '.$site->Domain);
+        ])->send('A common name mismatch has been detected for domain '.$site->Domain.'. HTTPS requests to this domain may be failing for end-users.');
     }
 
     /**

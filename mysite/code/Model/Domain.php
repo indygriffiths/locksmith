@@ -145,7 +145,8 @@ class Domain extends DataObject
     {
         return empty($this->ErrorCode) &&
                empty($this->ErrorMessage) &&
-               !empty($this->LastChecked);
+               !empty($this->LastChecked) &&
+               $this->HasValidCertificate();
     }
 
     /**

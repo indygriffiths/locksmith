@@ -62,6 +62,7 @@ class Certificate extends DataObject
     public function getIsValid()
     {
         return
+            $this->exists() &&
             date('U', strtotime($this->ValidFrom)) < time() &&
             date('U', strtotime($this->ValidTo)) >= time()
         ;
