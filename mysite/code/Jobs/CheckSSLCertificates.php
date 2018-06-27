@@ -249,8 +249,7 @@ class CheckSSLCertificates implements CronTask
         $streamOptions = stream_context_create([
             'ssl' => [
                 'capture_peer_cert' => true,
-                'verify_peer' => true,
-                'verify_peer_name' => true,
+                'verify_peer'       => false,
             ],
         ]);
 
