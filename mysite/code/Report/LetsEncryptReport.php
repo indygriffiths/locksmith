@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Report for listing domains who are using Let's Encrypt
+ * Report for listing domains who are using Let's Encrypt.
  */
 class LetsEncryptReport extends SS_Report
 {
@@ -18,8 +18,8 @@ class LetsEncryptReport extends SS_Report
     public function sourceRecords($params = null)
     {
         return Domain::get()
-                     ->filter(['Certificates.Issuer:PartialMatch' => 'Let\'s Encrypt'])
-                     ->sort('Domain');
+            ->filter(['Certificates.Issuer:PartialMatch' => 'Let\'s Encrypt'])
+            ->sort('Domain');
     }
 
     public function columns()

@@ -21,5 +21,5 @@ SS_Report::add_excluded_reports([
     'BrokenRedirectorPagesReport',
     'BrokenVirtualPagesReport',
     'RecentlyEditedReport',
-    'EmptyPagesReport'
+    'EmptyPagesReport',
 ]);

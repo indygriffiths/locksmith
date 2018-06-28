@@ -26,7 +26,7 @@ class GetCloudFlareDomains implements CronTask
         $zones = $cf->Zones();
 
         foreach ($zones as $z) {
-            if (in_array($z->name, $domains)) {
+            if (in_array($z->name, $domains, true)) {
                 continue;
             }
 

@@ -26,7 +26,7 @@ class GetIncapsulaDomains implements CronTask
         $zones = $cf->Sites();
 
         foreach ($zones as $z) {
-            if (in_array($z->domain, $domains)) {
+            if (in_array($z->domain, $domains, true)) {
                 continue;
             }
 

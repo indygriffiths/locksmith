@@ -13,6 +13,7 @@ class Domain extends DataObject
         'OpsGenieID' => 'Text',
         'AlertPriority' => 'Text',
         'AlertedCommonNameMismatch' => 'Boolean(0)',
+        'HasBeenChecked' => 'Boolean(0)',
     ];
 
     private static $has_many = [
@@ -144,9 +145,9 @@ class Domain extends DataObject
     public function LastCheckSuccessful()
     {
         return empty($this->ErrorCode) &&
-               empty($this->ErrorMessage) &&
-               !empty($this->LastChecked) &&
-               $this->HasValidCertificate();
+            empty($this->ErrorMessage) &&
+            !empty($this->LastChecked) &&
+            $this->HasValidCertificate();
     }
 
     /**

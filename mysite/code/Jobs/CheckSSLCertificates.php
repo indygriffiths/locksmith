@@ -12,7 +12,7 @@ class CheckSSLCertificates implements CronTask
      */
     public function getSchedule()
     {
-        return '0 * * * *';
+        return '0/30 * * * *';
     }
 
     /**
@@ -26,6 +26,7 @@ class CheckSSLCertificates implements CronTask
         $this->log('Number of existing domains: '.$domains->count(), SS_Log::DEBUG);
 
         foreach ($domains as $d) {
+            $hasBeenChecked = $d->HasBeenChecked;
             $d->LastChecked = time();
 
             $this->log('Checking '.$d->Domain, SS_Log::INFO);
@@ -90,6 +91,7 @@ class CheckSSLCertificates implements CronTask
             $d->ErrorCode = '';
             $d->ErrorMessage = '';
             $d->AlertedCommonNameMismatch = false;
+            $d->HasBeenChecked = true;
 
             $this->log('Checking this certificate against the current one', SS_Log::DEBUG);
             if ($lastCert->exists() && $lastCert->Fingerprint === $fingerprint) {
@@ -121,7 +123,7 @@ class CheckSSLCertificates implements CronTask
             $d->write();
 
             // Post to Slack about the new certificate only if this isn't the first certificate
-            if ($lastCert->exists()) {
+            if ($hasBeenChecked) {
                 $this->notifyNewCertificate($d, $cert);
             }
         }
@@ -249,7 +251,7 @@ class CheckSSLCertificates implements CronTask
         $streamOptions = stream_context_create([
             'ssl' => [
                 'capture_peer_cert' => true,
-                'verify_peer'       => false,
+                'verify_peer' => false,
             ],
         ]);
 
