@@ -114,7 +114,7 @@ class CheckSSLCertificates implements CronTask
             $newCert->Domains = $cert['extensions']['subjectAltName'];
             $newCert->ValidFrom = date('Y-m-d H:i:s', $cert['validFrom_time_t']);
             $newCert->ValidTo = date('Y-m-d H:i:s', $cert['validTo_time_t']);
-            $newCert->Serial = $cert['serialNumberHex'];
+            $newCert->Serial = $cert['serialNumber'];
             $newCert->Fingerprint = $fingerprint;
             $newCert->write();
 
@@ -148,7 +148,7 @@ class CheckSSLCertificates implements CronTask
         $settings = [
             'username' => SiteConfig::current_site_config()->Title,
             'channel' => SiteConfig::current_site_config()->SlackChannel,
-            'icon' => SiteConfig::current_site_config()->SlackEmoji,
+            'icon' => SiteConfig::current_site_config()->SlackEmoji
         ];
 
         $client = new Maknz\Slack\Client(SLACK_WEBHOOK_URL, $settings);
@@ -178,7 +178,7 @@ class CheckSSLCertificates implements CronTask
                     'short' => true,
                 ],
             ],
-        ])->disableMarkdown()->send('A new certificate has been detected for '.$site->Domain);
+        ])->send('A new certificate has been detected for '.$site->Domain);
     }
 
     /**
@@ -200,14 +200,14 @@ class CheckSSLCertificates implements CronTask
         $settings = [
             'username' => SiteConfig::current_site_config()->Title,
             'channel' => SiteConfig::current_site_config()->SlackChannel,
-            'icon' => SiteConfig::current_site_config()->SlackEmoji,
+            'icon' => SiteConfig::current_site_config()->SlackEmoji
         ];
 
         $client = new Maknz\Slack\Client(SLACK_WEBHOOK_URL, $settings);
         $client->attach([
             'color' => 'danger',
             'title' => $error,
-        ])->disableMarkdown()->send('The certificate check for '.$site->Domain.' is failing. HTTPS requests to this domain may be failing for end-users.');
+        ])->send('The certificate check for '.$site->Domain.' is failing. HTTPS requests to this domain may be failing for end-users.');
     }
 
     /**
@@ -229,14 +229,14 @@ class CheckSSLCertificates implements CronTask
         $settings = [
             'username' => SiteConfig::current_site_config()->Title,
             'channel' => SiteConfig::current_site_config()->SlackChannel,
-            'icon' => SiteConfig::current_site_config()->SlackEmoji,
+            'icon' => SiteConfig::current_site_config()->SlackEmoji
         ];
 
         $client = new Maknz\Slack\Client(SLACK_WEBHOOK_URL, $settings);
         $client->attach([
             'color' => 'danger',
             'title' => $error,
-        ])->disableMarkdown()->send('A common name mismatch has been detected for domain '.$site->Domain.'. HTTPS requests to this domain may be failing for end-users.');
+        ])->send('A common name mismatch has been detected for domain '.$site->Domain.'. HTTPS requests to this domain may be failing for end-users.');
     }
 
     /**
