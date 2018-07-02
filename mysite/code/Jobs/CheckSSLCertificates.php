@@ -178,7 +178,7 @@ class CheckSSLCertificates implements CronTask
                     'short' => true,
                 ],
             ],
-        ])->send('A new certificate has been detected for '.$site->Domain);
+        ])->disableMarkdown()->send('A new certificate has been detected for '.$site->Domain);
     }
 
     /**
@@ -207,7 +207,7 @@ class CheckSSLCertificates implements CronTask
         $client->attach([
             'color' => 'danger',
             'title' => $error,
-        ])->send('The certificate check for '.$site->Domain.' is failing. HTTPS requests to this domain may be failing for end-users.');
+        ])->disableMarkdown()->send('The certificate check for '.$site->Domain.' is failing. HTTPS requests to this domain may be failing for end-users.');
     }
 
     /**
@@ -236,7 +236,7 @@ class CheckSSLCertificates implements CronTask
         $client->attach([
             'color' => 'danger',
             'title' => $error,
-        ])->send('A common name mismatch has been detected for domain '.$site->Domain.'. HTTPS requests to this domain may be failing for end-users.');
+        ])->disableMarkdown()->send('A common name mismatch has been detected for domain '.$site->Domain.'. HTTPS requests to this domain may be failing for end-users.');
     }
 
     /**
@@ -268,7 +268,7 @@ class CheckSSLCertificates implements CronTask
             $socketErrors[] = str_replace('stream_socket_client(): ', '', $errstr);
         }, E_WARNING);
 
-        $read = stream_socket_client('ssl://'.$domain.':443', $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $streamOptions);
+        $read = stream_socket_client('ssl://'.$domain.':443', $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $streamOptions);
         restore_error_handler();
 
         if (!empty($socketErrors)) {
