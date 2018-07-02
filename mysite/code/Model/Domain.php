@@ -22,6 +22,7 @@ class Domain extends DataObject
 
     private static $summary_fields = [
         'Domain' => 'Domain',
+        'Source' => 'Source',
         'LastCheckSuccessfulNice' => 'Last Check Successful?',
         'HasValidCertificateNice' => 'Has a Valid Certificate?',
         'CurrentCertificate.Name' => 'Certificate Name',
