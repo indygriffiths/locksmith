@@ -8,6 +8,7 @@ SiteConfig:
   extensions:
     - OpsGenieSiteConfigExtension
     - SlackSiteConfigExtension
+    - FreshdeskSiteConfigExtension
 Domain:
   api_access: true
 Certificate:

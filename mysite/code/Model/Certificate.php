@@ -80,4 +80,12 @@ class Certificate extends DataObject
         // We use %r%a to ensure we provide a - if the number of days is a negative
         return $earlier->diff($later)->format('%r%a');
     }
+
+    /**
+     * @return bool True if this is a LE cert
+     */
+    public function getIsLetsEncrypt()
+    {
+        return false !== stripos($this->Issuer, "Let's Encrypt");
+    }
 }

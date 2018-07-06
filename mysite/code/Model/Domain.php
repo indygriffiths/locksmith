@@ -14,6 +14,8 @@ class Domain extends DataObject
         'AlertPriority' => 'Text',
         'AlertedCommonNameMismatch' => 'Boolean(0)',
         'HasBeenChecked' => 'Boolean(0)',
+        'FreshdeskID' => 'Text',
+        'FreshdeskPriority' => 'Text',
     ];
 
     private static $has_many = [
@@ -63,10 +65,19 @@ class Domain extends DataObject
             ->setRows(1)
             ->setDescription('The ID of the OpsGenie alert for this domain. Set to empty if there is no alert');
 
+        $fields->dataFieldByName('FreshdeskID')
+            ->setRows(1)
+            ->setDescription('The ID of the Freshdesk ticket for this domain. Set to empty if there is no alert');
+
         $fields->dataFieldByName('AlertPriority')
             ->setRows(1)
             ->setReadonly(true)
             ->setDescription('The current status of the OpsGenie alert (P5 to P1)');
+
+        $fields->dataFieldByName('FreshdeskPriority')
+            ->setRows(1)
+            ->setReadonly(true)
+            ->setDescription('The current priority of the Freshdesk ticket (1 to 4)');
 
         $fields->addFieldToTab('Root.Certificates', GridField::create(
             'Certificates',

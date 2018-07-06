@@ -10,6 +10,8 @@ class OpsGenie
      *
      * @param string $id
      *
+     * @throws Exception
+     *
      * @return bool|mixed
      */
     public function getRequestStatus($id)
@@ -22,6 +24,8 @@ class OpsGenie
      *
      * @param array $params
      *
+     * @throws Exception
+     *
      * @return bool|mixed
      */
     public function getAlerts($params = [])
@@ -33,6 +37,8 @@ class OpsGenie
      * Creates an alert.
      *
      * @param array $params
+     *
+     * @throws Exception
      *
      * @return bool|mixed
      */
@@ -60,6 +66,8 @@ class OpsGenie
      *
      * @param string $id
      *
+     * @throws Exception
+     *
      * @return bool|mixed
      */
     public function getAlert($id)
@@ -73,6 +81,8 @@ class OpsGenie
      * @param string $id
      * @param array  $params
      *
+     * @throws Exception
+     *
      * @return bool|mixed
      */
     public function closeAlert($id, $params = [])
@@ -85,6 +95,8 @@ class OpsGenie
      *
      * @param string $id
      * @param string $message
+     *
+     * @throws Exception
      *
      * @return bool|mixed
      */
@@ -100,6 +112,8 @@ class OpsGenie
      *
      * @param string $id
      * @param string $priority
+     *
+     * @throws Exception
      *
      * @return bool|mixed
      */

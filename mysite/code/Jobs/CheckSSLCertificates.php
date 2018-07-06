@@ -148,7 +148,7 @@ class CheckSSLCertificates implements CronTask
         $settings = [
             'username' => SiteConfig::current_site_config()->Title,
             'channel' => SiteConfig::current_site_config()->SlackChannel,
-            'icon' => SiteConfig::current_site_config()->SlackEmoji
+            'icon' => SiteConfig::current_site_config()->SlackEmoji,
         ];
 
         $client = new Maknz\Slack\Client(SLACK_WEBHOOK_URL, $settings);
@@ -200,7 +200,7 @@ class CheckSSLCertificates implements CronTask
         $settings = [
             'username' => SiteConfig::current_site_config()->Title,
             'channel' => SiteConfig::current_site_config()->SlackChannel,
-            'icon' => SiteConfig::current_site_config()->SlackEmoji
+            'icon' => SiteConfig::current_site_config()->SlackEmoji,
         ];
 
         $client = new Maknz\Slack\Client(SLACK_WEBHOOK_URL, $settings);
@@ -229,7 +229,7 @@ class CheckSSLCertificates implements CronTask
         $settings = [
             'username' => SiteConfig::current_site_config()->Title,
             'channel' => SiteConfig::current_site_config()->SlackChannel,
-            'icon' => SiteConfig::current_site_config()->SlackEmoji
+            'icon' => SiteConfig::current_site_config()->SlackEmoji,
         ];
 
         $client = new Maknz\Slack\Client(SLACK_WEBHOOK_URL, $settings);

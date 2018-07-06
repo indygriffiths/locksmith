@@ -37,6 +37,18 @@ CLOUDFLARE_USER_EMAIL=foo@silverstripe.com
 ```
 
 
+### Freshdesk Alerting
+
+When defined, upcoming certificate renewals will be created as Freshdesk tickets. As the certificate approaches expiration, the priority will be increased. If a new certificate is detected, the ticket will be closed.
+
+```
+FRESHDESK_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+FRESHDESK_USER_ID=123456789
+FRESHDESK_DOMAIN=https://foo.freshdesk.com
+```
+
+Additional options can be configured in the CMS, such as the group and product the ticket should be created as.
+
 ### OpsGenie Alerting
 
 When defined, any upcoming certificate renewals will be created as alerts in OpsGenie if configured in the Settings section of the CMS.

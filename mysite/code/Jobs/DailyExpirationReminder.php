@@ -69,6 +69,14 @@ class DailyExpirationReminder implements CronTask
                 $cert->ValidTo
             );
 
+            if (Freshdesk::IsAvailable() && $d->FreshdeskID) {
+                $line .= sprintf(
+                    ', <%s/helpdesk/tickets/%s|open in Freshdesk>',
+                    FRESHDESK_DOMAIN,
+                    $d->FreshdeskID
+                );
+            }
+
             $alerts[$priority][] = $line;
         }
 
