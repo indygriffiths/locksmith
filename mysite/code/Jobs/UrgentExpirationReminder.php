@@ -3,7 +3,7 @@
 use Maknz\Slack\Attachment;
 
 /**
- * Class for posting to Slack the certificates expiring soon.
+ * Class for posting to Slack the certificates expiring urgently.
  */
 class UrgentExpirationReminder implements CronTask
 {
@@ -14,7 +14,7 @@ class UrgentExpirationReminder implements CronTask
      */
     public function getSchedule()
     {
-        return '0 * * * *';
+        return '*/30 * * * *';
     }
 
     public function process()
@@ -82,7 +82,7 @@ class UrgentExpirationReminder implements CronTask
             return;
         }
 
-        $this->log('Sending the hourly urgent Slack certificate expiration reminder', SS_Log::INFO);
+        $this->log('Sending the half-hourly urgent Slack certificate expiration reminder', SS_Log::INFO);
 
         // Sort the array by the priority
         ksort($alerts);
@@ -105,7 +105,7 @@ class UrgentExpirationReminder implements CronTask
             ]);
         }
 
-        $client->setAttachments($attachments)->send('The following certificates are about to expire and need to be dealt with ASAP. This alert is sent every hour by <https://platform.silverstripe.com/naut/project/locksmit|Locksmith>.');
+        $client->setAttachments($attachments)->send('The following certificates are about to expire and need to be dealt with ASAP. This alert is sent every half hour by <https://platform.silverstripe.com/naut/project/locksmit|Locksmith>.');
     }
 
     /**
