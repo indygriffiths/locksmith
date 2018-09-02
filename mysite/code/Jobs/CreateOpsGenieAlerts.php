@@ -69,6 +69,10 @@ class CreateOpsGenieAlerts implements CronTask
                 continue;
             }
 
+            if($cert->IsLetsEncrypt) {
+                $this->log('Certificate is for Lets Encrypt, not creating an OpsGenie alert', SS_Log::INFO);
+            }
+
             $priority = $this->closestNumber($cert->DaysUntilExpiration, $alertDays);
             $this->log('Current alert priority: '.$priority, SS_Log::DEBUG);
 

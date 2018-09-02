@@ -4,10 +4,6 @@
     <p style="margin-bottom:10px">This domain was added from $Domain.Source, so the certificate may be renewed automatically with {$Domain.Source}.</p>
 <% end_if %>
 
-<% if $Certificate.IsLetsEncrypt %>
-    <p style="margin-bottom:10px">The current certificate was issued by Let's Encrypt, so the certificate may be renewed automatically.</p>
-<% end_if %>
-
 <h3 style="margin-bottom:10px">Certificate Information</h3>
 <ul>
     <li>Certificate: $Certificate.Name</li>

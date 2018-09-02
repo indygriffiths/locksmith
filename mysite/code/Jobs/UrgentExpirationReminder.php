@@ -14,7 +14,7 @@ class UrgentExpirationReminder implements CronTask
      */
     public function getSchedule()
     {
-        return '*/30 * * * *';
+        return '0 * * * *';
     }
 
     public function process()
@@ -71,6 +71,10 @@ class UrgentExpirationReminder implements CronTask
                     FRESHDESK_DOMAIN,
                     $d->FreshdeskID
                 );
+            }
+
+            if ($cert->IsLetsEncrypt) {
+                $line .= ', *using Let\'s Encrypt*';
             }
 
             $alerts[$priority][] = $line;

@@ -9,8 +9,9 @@ trait CronTaskUtilities
     /**
      * Returns the closest key from an array using its values.
      *
-     * @param int   $number
+     * @param int $number
      * @param array $array
+     * @return int|null|string
      */
     public function closestNumber($number, $array)
     {

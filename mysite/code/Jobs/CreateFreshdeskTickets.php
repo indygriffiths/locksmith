@@ -50,10 +50,15 @@ class CreateFreshdeskTickets implements CronTask
                 continue;
             }
 
+            /** @var Certificate $cert */
             $cert = $d->CurrentCertificate();
 
             $this->log('Checking '.$d->Domain, SS_Log::INFO);
             $this->log('Days until expiration: '.$cert->DaysUntilExpiration, SS_Log::DEBUG);
+
+            if($cert->IsLetsEncrypt) {
+                $this->log('Certificate is for Lets Encrypt, not creating a Freshdesk ticket', SS_Log::INFO);
+            }
 
             // Skip if we're outside the alerting threshold
             if ($cert->DaysUntilExpiration > $startAlerting) {
