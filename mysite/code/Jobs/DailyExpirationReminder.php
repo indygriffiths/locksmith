@@ -77,6 +77,10 @@ class DailyExpirationReminder implements CronTask
                 );
             }
 
+            if ($cert->IsLetsEncrypt) {
+                $line .= ', *using Let\'s Encrypt*';
+            }
+
             $alerts[$priority][] = $line;
         }
 
