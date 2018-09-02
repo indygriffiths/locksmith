@@ -62,7 +62,7 @@ class DailyExpirationReminder implements CronTask
 
             // Create the line for this domain with a link to open it in the tool
             $line = sprintf(
-                '%s, expires <%s/admin/domains/Domain/EditForm/field/Domain/item/%s/edit|%s>',
+                '%s [<%s/admin/domains/Domain/EditForm/field/Domain/item/%s/edit|%s>]',
                 $d->Domain,
                 Director::absoluteBaseURL(),
                 $d->ID,
@@ -71,14 +71,15 @@ class DailyExpirationReminder implements CronTask
 
             if (Freshdesk::IsAvailable() && $d->FreshdeskID) {
                 $line .= sprintf(
-                    ', <%s/helpdesk/tickets/%s|open in Freshdesk>',
+                    ' [<%s/helpdesk/tickets/%s|#%s>]',
                     FRESHDESK_DOMAIN,
+                    $d->FreshdeskID,
                     $d->FreshdeskID
                 );
             }
 
             if ($cert->IsLetsEncrypt) {
-                $line .= ', *using Let\'s Encrypt*';
+                $line .= ' [Let\'s Encrypt]';
             }
 
             $alerts[$priority][] = $line;
