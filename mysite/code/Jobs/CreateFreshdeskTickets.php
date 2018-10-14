@@ -92,6 +92,9 @@ class CreateFreshdeskTickets implements CronTask
                     'requester_id' => (int) FRESHDESK_USER_ID,
                     'status' => Freshdesk::STATUS_OPEN,
                     'tags' => ['ssl', 'locksmith'],
+                    'custom_fields' => [
+                        'cf_next_scheduled_action' => date('Y-m-d')
+                    ]
                 ]);
 
                 $d->FreshdeskID = $ticket->id;
