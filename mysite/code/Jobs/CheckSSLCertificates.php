@@ -105,6 +105,13 @@ class CheckSSLCertificates implements CronTask
 
             $this->log('Adding new certificate', SS_Log::DEBUG);
 
+            // Check if the cert already exists for this domain
+            $existingCert = Certificate::get()->where([
+                'DomainID'    => $d->ID,
+                'Serial'      => $cert['serialNumber'],
+                'Fingerprint' => $fingerprint
+            ])->count();
+
             // Create the new cert
             $newCert = Certificate::create();
             $newCert->DomainID = $d->ID;
@@ -123,8 +130,10 @@ class CheckSSLCertificates implements CronTask
             $d->write();
 
             // Post to Slack about the new certificate only if this isn't the first certificate
-            if ($hasBeenChecked) {
+            if ($hasBeenChecked && $existingCert == 0) {
                 $this->notifyNewCertificate($d, $cert);
+            } else {
+                $this->log('Skipping notification', SS_Log::DEBUG);
             }
         }
     }
