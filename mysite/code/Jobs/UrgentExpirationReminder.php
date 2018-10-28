@@ -49,7 +49,7 @@ class UrgentExpirationReminder implements CronTask
             $this->log('Days until expiration: '.$cert->DaysUntilExpiration, SS_Log::DEBUG);
 
             // Skip if we're outside the alerting threshold
-            if ($cert->DaysUntilExpiration > $startAlerting) {
+            if ($cert->DaysUntilExpiration > $startAlerting || $cert->DaysUntilExpiration < 0) {
                 continue;
             }
 
@@ -109,7 +109,7 @@ class UrgentExpirationReminder implements CronTask
             ]);
         }
 
-        $client->setAttachments($attachments)->send('The following certificates are about to expire and need to be dealt with ASAP. This alert is sent every half hour by <https://platform.silverstripe.com/naut/project/locksmit|Locksmith>.');
+        $client->setAttachments($attachments)->send('The following certificates are about to expire and need to be dealt with ASAP');
     }
 
     /**
