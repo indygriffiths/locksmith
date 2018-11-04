@@ -16,6 +16,7 @@ class Domain extends DataObject
         'HasBeenChecked' => 'Boolean(0)',
         'FreshdeskID' => 'Text',
         'FreshdeskPriority' => 'Text',
+        'StackID' => 'Text',
     ];
 
     private static $has_many = [
