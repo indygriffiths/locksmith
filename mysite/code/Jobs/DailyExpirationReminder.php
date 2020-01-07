@@ -53,7 +53,7 @@ class DailyExpirationReminder implements CronTask
             $this->log('Days until expiration: '.$cert->DaysUntilExpiration, SS_Log::DEBUG);
 
             // Skip if we're outside the alerting threshold
-            if ($cert->DaysUntilExpiration > $startAlerting) {
+            if ($cert->DaysUntilExpiration > $startAlerting || $cert->DaysUntilExpiration <= -21) {
                 continue;
             }
 
